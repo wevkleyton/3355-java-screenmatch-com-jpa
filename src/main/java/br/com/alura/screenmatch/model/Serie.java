@@ -2,6 +2,8 @@ package br.com.alura.screenmatch.model;
 import br.com.alura.screenmatch.service.ConsultaChatGPT;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.OptionalDouble;
 
 @Entity
@@ -20,15 +22,17 @@ public class Serie {
     private String atores;
     private String poster;
     private String sinopse;
+    @Transient // informa para JPA que esse campo não vai ser serializado
+    private List<Episodio> episodios = new ArrayList<>();
 
     public Serie(DadosSerie dadosSerie){
         this.titulo = dadosSerie.titulo();
         this.totalTemporadas = dadosSerie.totalTemporadas();
-        this.avaliacao = OptionalDouble.of(Double.valueOf(dadosSerie.avaliacao())).orElse(0);
+        this.avaliacao = OptionalDouble.of(Double.parseDouble(dadosSerie.avaliacao())).orElse(0);
         this.genero = Categoria.fromString(dadosSerie.genero().split(",")[0].trim());
         this.atores = dadosSerie.atores();
         this.poster = dadosSerie.poster();
-        this.sinopse = ConsultaChatGPT.obterTraducao(dadosSerie.sinopse()).trim();
+//        this.sinopse = ConsultaChatGPT.obterTraducao(dadosSerie.sinopse()).trim();
     }
 
     public Long getId() {
@@ -93,6 +97,14 @@ public class Serie {
 
     public void setSinopse(String sinopse) {
         this.sinopse = sinopse;
+    }
+
+    public List<Episodio> getEpisodios() {
+        return episodios;
+    }
+
+    public void setEpisodios(List<Episodio> episodios) {
+        this.episodios = episodios;
     }
 
     @Override
