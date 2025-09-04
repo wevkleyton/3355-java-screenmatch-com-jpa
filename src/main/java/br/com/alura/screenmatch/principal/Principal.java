@@ -7,6 +7,7 @@ import br.com.alura.screenmatch.model.Serie;
 import br.com.alura.screenmatch.repository.SerieRepository;
 import br.com.alura.screenmatch.service.ConsumoApi;
 import br.com.alura.screenmatch.service.ConverteDados;
+import org.apache.logging.log4j.util.PropertySource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
@@ -89,9 +90,7 @@ public class Principal {
     }
 
     private void ListarSeriesBuscadas(){
-        List<Serie> series = new ArrayList<>();
-        dadosSeries.stream().map(d -> new Serie(d))
-                            .collect(Collectors.toList());
+        List<Serie> series = repositorio.findAll();
         series.stream()
                 .sorted(Comparator.comparing(Serie::getGenero))
                 .forEach(System.out::println);
