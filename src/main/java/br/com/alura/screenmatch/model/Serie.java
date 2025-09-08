@@ -1,4 +1,5 @@
 package br.com.alura.screenmatch.model;
+
 import br.com.alura.screenmatch.service.ConsultaChatGPT;
 import jakarta.persistence.*;
 
@@ -7,7 +8,7 @@ import java.util.List;
 import java.util.OptionalDouble;
 
 @Entity
-@Table(name ="series")
+@Table(name = "series")
 public class Serie {
 
     @Id
@@ -23,12 +24,13 @@ public class Serie {
     private String poster;
     private String sinopse;
     //@Transient  informa para JPA que esse campo não vai ser serializado
-    @OneToMany(mappedBy = "serie")
+    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL)
     private List<Episodio> episodios = new ArrayList<>();
 
-    public Serie(){}
+    public Serie() {
+    }
 
-    public Serie(DadosSerie dadosSerie){
+    public Serie(DadosSerie dadosSerie) {
         this.titulo = dadosSerie.titulo();
         this.totalTemporadas = dadosSerie.totalTemporadas();
         this.avaliacao = OptionalDouble.of(Double.parseDouble(dadosSerie.avaliacao())).orElse(0);
@@ -112,7 +114,7 @@ public class Serie {
 
     @Override
     public String toString() {
-        return  "genero=" + genero +
+        return "genero=" + genero +
                 ", titulo='" + titulo + '\'' +
                 ", totalTemporadas=" + totalTemporadas +
                 ", avaliacao=" + avaliacao +
