@@ -22,7 +22,8 @@ public class Serie {
     private String atores;
     private String poster;
     private String sinopse;
-    @Transient // informa para JPA que esse campo não vai ser serializado
+    //@Transient  informa para JPA que esse campo não vai ser serializado
+    @OneToMany(mappedBy = "serie")
     private List<Episodio> episodios = new ArrayList<>();
 
     public Serie(){}
