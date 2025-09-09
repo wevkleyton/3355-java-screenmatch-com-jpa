@@ -32,11 +32,14 @@ public class Principal {
         var opcao = -1;
         while (opcao != 0) {
             var menu = """
-                    1 - Buscar séries
-                    2 - Buscar episódios
-                    3 - Listar Series Buscadas
-                    
-                    0 - Sair                                 
+                   ________________________________
+                   | 1 - Buscar séries            |
+                   | 2 - Buscar episódios         |
+                   | 3 - Listar Series Buscadas   |
+                   | 4 - Buscar Serie Por Titulo  |
+                   |                              |
+                   | 0 - Sair                     |
+                   --------------------------------              
                     """;
 
             System.out.println(menu);
@@ -53,12 +56,27 @@ public class Principal {
                 case 3:
                     listarSeriesBuscadas();
                     break;
+                case 4:
+                    buscarSeriePorTitulo();
+                    break;
                 case 0:
                     System.out.println("Saindo...");
                     break;
                 default:
                     System.out.println("Opção inválida");
             }
+        }
+    }
+
+    private void buscarSeriePorTitulo() {
+        System.out.println("Escolha um Titulo");
+        var nomeSerie = leitura.nextLine();
+        Optional<Serie> serieBuscada = repositorio.findByTituloContainingIgnoreCase(nomeSerie);
+
+        if (serieBuscada.isPresent()){
+            System.out.println("Dados da serie: " + serieBuscada.get());
+        }else {
+            System.out.println("Serie nao encontrada!");
         }
     }
 
@@ -82,8 +100,7 @@ public class Principal {
         listarSeriesBuscadas();
         System.out.println("Escolha uma Série pelo nome: ");
         var nomeSerie = leitura.nextLine();
-        Optional<Serie> serie = series.stream().filter(s -> s.getTitulo().toLowerCase().contains(nomeSerie.toLowerCase()))
-                .findFirst();
+        Optional<Serie> serie = repositorio.findByTituloContainingIgnoreCase(nomeSerie);
 
         if (serie.isPresent()){
             var serieEncontrada = serie.get();
